@@ -24,14 +24,14 @@ MODEL_BATCH_SIZE = 256
 MODEL_PRINT_INTERVAL = 10_000
 
 AGENTS = [
-    # "bc",
-    # "td3bc",
-    # "iql",
+    "bc",
+    "td3bc",
+    "iql",
     "cql",
     "aspl_c",
     "scas_n",
-    # "scaspl_n",
-    # "sccc_n",
+    "scaspl_n",
+    "sccc_n",
 ]
 
 DATASETS = [
@@ -51,17 +51,6 @@ DATASETS = [
     "halfcheetah_medium_replay",
     "halfcheetah_expert_replay",
 ]
-
-_TASKS = [
-    # ("scas_n", "hopper_expert"),
-    # ("scaspl_n", "hopper_expert"),
-    # ("bc", "hopper_medium_replay"),
-    # ("bc", "hopper_expert_replay"),
-    # ("scas_n", "walker2d_expert"),
-    # ("bc", "walker2d_medium_replay"),
-    # ("bc", "walker2d_expert_replay"),
-]
-
 
 def run_benchmark() -> None:
     rows: list[list[str]] = []
@@ -102,44 +91,5 @@ def run_benchmark() -> None:
         rows.append(row)
         write_table(table_path(EXPERIMENT), header, rows)
 
-def _run_tasks() -> None:
-    for task_index, (agent_id, dataset_id) in enumerate(_TASKS, start=1):
-        print(f"task {task_index}/{len(_TASKS)} agent={agent_id} dataset={dataset_id}")
-        dataset = D4RLDataset(dataset_id, DEVICE)
-        dynamic = (
-            train_dynamic(dataset, MODEL_STEPS, MODEL_BATCH_SIZE, MODEL_PRINT_INTERVAL)
-            if agent_id in DYNAMIC_AGENT_CLASSES
-            else None
-        )
-        returns = []
-        for train_index in range(1, N_MODEL + 1):
-            print(
-                f"task train {train_index}/{N_MODEL} "
-                f"agent={agent_id} dataset={dataset_id}"
-            )
-            agent = make_agent(agent_id, dataset, dynamic=dynamic)
-            returns.append(
-                train(
-                    agent,
-                    dataset,
-                    EXPERIMENT,
-                    train_index,
-                    N_TRAIN,
-                    N_EVAL,
-                    BATCH_SIZE,
-                    PRINT_INTERVAL,
-                    RETURN_AVG_WINDOW,
-                )
-            )
-        write_metrics(metrics_path(agent_id, dataset_id), returns)
-        mean_return = sum(returns) / len(returns)
-        print(f"task mean_return={mean_return:.6f} agent={agent_id} dataset={dataset_id}")
-
-
-def main() -> None:
-    run_benchmark()
-    _run_tasks()
-
-
 if __name__ == "__main__":
-    main()
+    run_benchmark()

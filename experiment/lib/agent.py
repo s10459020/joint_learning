@@ -19,32 +19,6 @@ from joint_learning.agents.sccc import (
 from joint_learning.agents.td3bc import TD3BCAgent, TD3BCGPAgent, TD3BCPGPAgent, TD3BCPAgent, TD3BCXNAgent, TD3BCXNGPAgent
 
 
-# Available agents for this compact build:
-# - "bc": behavior cloning baseline
-# - "td3bc": original TD3BC with normalized actor objective
-# - "td3bc_xn": TD3BC without actor objective normalization
-# - "td3bc_p": TD3BC-XN with reduced actor objective weight
-# - "td3bc_xn_gp": TD3BC-XN with action-gradient penalty
-# - "td3bc_p_gp": TD3BC-P with action-gradient penalty
-# - "td3bc_gp": original TD3BC with action-gradient penalty
-# - "iql": implicit Q-learning baseline
-# - "cql": conservative Q-learning baseline
-# - "aspl": action-space pseudo-labeling
-# - "aspl_c": ASPL with dataset-action compensation
-# - "aspl_gp": ASPL with action-gradient penalty
-# - "scas": state correction with action-space smoothing
-# - "scas_n": SCAS with normalized actor objective
-# - "scas_gp": SCAS with action-gradient penalty
-# - "scas_gpn": SCAS-GP with normalized actor objective
-# - "scaspl": SCAS with pseudo-label critic punishment
-# - "scaspl_n": SCASPL with normalized actor objective
-# - "scaspl_gp": SCASPL with action-gradient penalty
-# - "scaspl_c": SCASPL with dataset-action compensation
-# - "scaspl_nc": SCASPL-N with dataset-action compensation
-# - "sccc": SCAS with conservative critic
-# - "sccc_n": SCCC with normalized actor objective
-# - "sccc_gp": SCCC with action-gradient penalty
-# - "sccc_gpn": SCCC-GP with normalized actor objective
 AGENT_CLASSES = {
     "bc": BCAgent,
     "td3bc": TD3BCAgent,

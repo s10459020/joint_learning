@@ -8,8 +8,6 @@ from joint_learning.lib.paths import DATASET_ROOT
 Batch = tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]
 
 
-# Available datasets for this compact build.
-# Place the corresponding HDF5 files in the project-level datasets directory.
 D4RL_DATASETS = {
     "hopper_medium": ("hopper_medium-v2.hdf5", "Hopper-v5"),
     "hopper_expert": ("hopper_expert-v2.hdf5", "Hopper-v5"),
