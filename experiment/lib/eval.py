@@ -1,6 +1,18 @@
 import gymnasium as gym
 import numpy as np
 
+from experiment.agents.dynamics import Dynamic
+from experiment.lib.paths import dynamic_path
+
+
+def load_dynamic(dataset) -> Dynamic:
+    dynamic = Dynamic(dataset.obs_size, dataset.act_size, device=dataset.device)
+    path = dynamic_path(dataset)
+    if not path.exists():
+        raise FileNotFoundError(f"missing pretrained dynamics model: {path}")
+    dynamic.load(path)
+    return dynamic.eval().freeze()
+
 
 def evaluate(agent, env: gym.Env, dataset, episodes: int, seed: int | None = None) -> float:
     total_return = 0.0

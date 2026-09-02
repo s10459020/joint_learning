@@ -1,24 +1,16 @@
 import torch
 
-from experiment.lib.agent import DYNAMIC_AGENT_CLASSES
-from experiment.lib.agent import make_agent
+from experiment.lib.agent import DYNAMIC_AGENT_CLASSES, make_agent
 from experiment.lib.dataset import D4RLDataset
-from experiment.lib.paths import metrics_path
-from experiment.lib.paths import table_path
-from experiment.lib.table import write_table
-from experiment.lib.train import train
-from experiment.lib.train import train_dynamic
-from experiment.lib._metrics import write_metrics
+from experiment.lib.train import train, train_dynamic
 
 
-EXPERIMENT = "benchmark"
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+EXPERIMENT = "benchmark"
 N_MODEL = 10
 N_TRAIN = 500_000
-N_EVAL = 5
 BATCH_SIZE = 256
 PRINT_INTERVAL = 5_000
-RETURN_AVG_WINDOW = 10
 MODEL_STEPS = 500_000
 MODEL_BATCH_SIZE = 256
 MODEL_PRINT_INTERVAL = 10_000
@@ -52,12 +44,9 @@ DATASETS = [
     "halfcheetah_expert_replay",
 ]
 
-def run_benchmark() -> None:
-    rows: list[list[str]] = []
-    header = ["dataset"] + AGENTS
 
+def train_benchmark() -> None:
     for dataset_id in DATASETS:
-        row = [dataset_id]
         dataset = D4RLDataset(dataset_id, DEVICE)
         dynamic = (
             train_dynamic(dataset, MODEL_STEPS, MODEL_BATCH_SIZE, MODEL_PRINT_INTERVAL)
@@ -65,31 +54,22 @@ def run_benchmark() -> None:
             else None
         )
         for agent_id in AGENTS:
-            returns = []
             for train_index in range(1, N_MODEL + 1):
                 print(
                     f"train {train_index}/{N_MODEL} "
                     f"agent={agent_id} dataset={dataset_id}"
                 )
                 agent = make_agent(agent_id, dataset, dynamic=dynamic)
-                returns.append(
-                    train(
-                        agent,
-                        dataset,
-                        EXPERIMENT,
-                        train_index,
-                        N_TRAIN,
-                        N_EVAL,
-                        BATCH_SIZE,
-                        PRINT_INTERVAL,
-                        RETURN_AVG_WINDOW,
-                    )
+                train(
+                    agent,
+                    dataset,
+                    EXPERIMENT,
+                    train_index,
+                    N_TRAIN,
+                    BATCH_SIZE,
+                    PRINT_INTERVAL,
                 )
-            write_metrics(metrics_path(agent_id, dataset_id), returns)
-            mean_return = sum(returns) / len(returns)
-            row.append(f"{mean_return:.6f}")
-        rows.append(row)
-        write_table(table_path(EXPERIMENT), header, rows)
+
 
 if __name__ == "__main__":
-    run_benchmark()
+    train_benchmark()
