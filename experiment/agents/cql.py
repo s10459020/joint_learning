@@ -6,7 +6,7 @@ import torch
 import torch.nn.functional as F
 from torch.distributions import Normal
 
-from joint_learning.lib.dataset import Batch
+from experiment.lib.dataset import Batch
 
 
 class CQLActor(torch.nn.Module):

@@ -4,7 +4,7 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 
-from joint_learning.lib.dataset import Batch
+from experiment.lib.dataset import Batch
 
 
 class BCActor(torch.nn.Module):

@@ -1,10 +1,10 @@
 import torch
 from torch.nn import functional as F
 
-from joint_learning.agents.dynamics import Dynamic
-from joint_learning.agents.scas import SCASAgent
-from joint_learning.agents.variant import GPAgent, NAgent
-from joint_learning.lib.dataset import Batch
+from experiment.agents.dynamics import Dynamic
+from experiment.agents.scas import SCASAgent
+from experiment.agents.variant import GPAgent, NAgent
+from experiment.lib.dataset import Batch
 
 
 class SCCCAgent(SCASAgent):

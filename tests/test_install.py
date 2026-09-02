@@ -3,7 +3,7 @@ import sys
 import gymnasium
 import h5py
 import huggingface_hub
-import joint_learning
+import experiment
 import matplotlib
 import numpy
 import torch
@@ -18,7 +18,7 @@ ENVIRONMENT_IDS = (
 
 def main() -> None:
     print(f"python={sys.version.split()[0]}")
-    print(f"joint_learning={joint_learning.__file__}")
+    print(f"experiment={experiment.__file__}")
     print(f"gymnasium={gymnasium.__version__}")
     print(f"h5py={h5py.__version__}")
     print(f"huggingface_hub={huggingface_hub.__version__}")

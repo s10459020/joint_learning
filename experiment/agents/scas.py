@@ -1,9 +1,9 @@
 import torch
 
-from joint_learning.agents.dynamics import Dynamic
-from joint_learning.agents.td3 import TD3Agent
-from joint_learning.agents.variant import GPAgent, NAgent
-from joint_learning.lib.dataset import Batch
+from experiment.agents.dynamics import Dynamic
+from experiment.agents.td3 import TD3Agent
+from experiment.agents.variant import GPAgent, NAgent
+from experiment.lib.dataset import Batch
 
 
 class SCASAgent(TD3Agent):

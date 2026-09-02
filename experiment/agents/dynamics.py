@@ -3,7 +3,7 @@ from pathlib import Path
 import torch
 from torch.nn import functional as F
 
-from joint_learning.lib.dataset import Batch
+from experiment.lib.dataset import Batch
 
 
 class Dynamic(torch.nn.Module):

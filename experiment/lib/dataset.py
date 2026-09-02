@@ -2,7 +2,7 @@ import h5py
 import numpy as np
 import torch
 
-from joint_learning.lib.paths import DATASET_ROOT
+from experiment.lib.paths import DATASET_ROOT
 
 
 Batch = tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]

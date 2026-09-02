@@ -1,14 +1,14 @@
 import torch
 
-from joint_learning.lib.agent import DYNAMIC_AGENT_CLASSES
-from joint_learning.lib.agent import make_agent
-from joint_learning.lib.dataset import D4RLDataset
-from joint_learning.lib.paths import metrics_path
-from joint_learning.lib.paths import table_path
-from joint_learning.lib.table import write_table
-from joint_learning.lib.train import train
-from joint_learning.lib.train import train_dynamic
-from joint_learning.lib._metrics import write_metrics
+from experiment.lib.agent import DYNAMIC_AGENT_CLASSES
+from experiment.lib.agent import make_agent
+from experiment.lib.dataset import D4RLDataset
+from experiment.lib.paths import metrics_path
+from experiment.lib.paths import table_path
+from experiment.lib.table import write_table
+from experiment.lib.train import train
+from experiment.lib.train import train_dynamic
+from experiment.lib._metrics import write_metrics
 
 
 EXPERIMENT = "benchmark"

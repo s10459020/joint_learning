@@ -1,9 +1,9 @@
 import torch
 from torch.nn import functional as F
 
-from joint_learning.agents.td3 import TD3Agent
-from joint_learning.agents.variant import GPAgent
-from joint_learning.lib.dataset import Batch
+from experiment.agents.td3 import TD3Agent
+from experiment.agents.variant import GPAgent
+from experiment.lib.dataset import Batch
 
 
 class TD3BCAgent(TD3Agent):

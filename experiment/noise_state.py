@@ -1,13 +1,13 @@
 import gymnasium as gym
 
-from joint_learning.lib.agent import make_agent
-from joint_learning.lib.dataset import D4RLDataset
-from joint_learning.lib.eval import evaluate_state_noise
-from joint_learning.lib.paths import agent_path
-from joint_learning.lib.paths import metrics_path
-from joint_learning.lib.paths import table_path
-from joint_learning.lib._metrics import write_metrics
-from joint_learning.lib.table import write_table
+from experiment.lib.agent import make_agent
+from experiment.lib.dataset import D4RLDataset
+from experiment.lib.eval import evaluate_state_noise
+from experiment.lib.paths import agent_path
+from experiment.lib.paths import metrics_path
+from experiment.lib.paths import table_path
+from experiment.lib._metrics import write_metrics
+from experiment.lib.table import write_table
 
 
 EXPERIMENT = "noise_state"

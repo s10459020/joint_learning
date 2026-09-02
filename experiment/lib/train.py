@@ -1,11 +1,11 @@
 import gymnasium as gym
 
-from joint_learning.agents.dynamics import Dynamic
-from joint_learning.lib.eval import evaluate
-from joint_learning.lib.paths import agent_path
-from joint_learning.lib.paths import dynamic_path
-from joint_learning.lib.paths import plot_path
-from joint_learning.lib.plot import save_training_plot
+from experiment.agents.dynamics import Dynamic
+from experiment.lib.eval import evaluate
+from experiment.lib.paths import agent_path
+from experiment.lib.paths import dynamic_path
+from experiment.lib.paths import plot_path
+from experiment.lib.plot import save_training_plot
 
 
 def train_dynamic(dataset, model_steps: int, model_batch_size: int, model_print_interval: int) -> Dynamic:

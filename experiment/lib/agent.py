@@ -1,22 +1,22 @@
-from joint_learning.agents.aspl import ASPLAgent, ASPLCAgent, ASPLGPAgent
-from joint_learning.agents.bc import BCAgent
-from joint_learning.agents.cql import CQLAgent
-from joint_learning.agents.iql import IQLAgent
-from joint_learning.agents.scas import SCASAgent, SCASGPAgent, SCASGPNAgent, SCASNAgent
-from joint_learning.agents.scaspl import (
+from experiment.agents.aspl import ASPLAgent, ASPLCAgent, ASPLGPAgent
+from experiment.agents.bc import BCAgent
+from experiment.agents.cql import CQLAgent
+from experiment.agents.iql import IQLAgent
+from experiment.agents.scas import SCASAgent, SCASGPAgent, SCASGPNAgent, SCASNAgent
+from experiment.agents.scaspl import (
     SCASPLAgent,
     SCASPLCAgent,
     SCASPLGPAgent,
     SCASPLNAgent,
     SCASPLNCAgent,
 )
-from joint_learning.agents.sccc import (
+from experiment.agents.sccc import (
     SCCCAgent,
     SCCCGPAgent,
     SCCCGPNAgent,
     SCCCNAgent,
 )
-from joint_learning.agents.td3bc import TD3BCAgent, TD3BCGPAgent, TD3BCPGPAgent, TD3BCPAgent, TD3BCXNAgent, TD3BCXNGPAgent
+from experiment.agents.td3bc import TD3BCAgent, TD3BCGPAgent, TD3BCPGPAgent, TD3BCPAgent, TD3BCXNAgent, TD3BCXNGPAgent
 
 
 AGENT_CLASSES = {
