@@ -4,7 +4,7 @@ from experiment.lib.agent import make_agent
 from experiment.lib.dataset import D4RLDataset
 from experiment.lib.eval import evaluate_state_noise, load_dynamic
 from experiment.lib.paths import agent_path, table_path
-from experiment.lib.table import write_table
+from experiment.lib.table import write_average_table
 
 
 EXPERIMENT = "noise_state"
@@ -46,33 +46,30 @@ def eval_noise_state() -> None:
         for dataset_id in DATASETS
         for noise_id, noise_scale in NOISE_SCALES
     ]
-    table_rows = [[""] * len(header) for _ in test_cases]
+    test_ids = [f"{EXPERIMENT}_{noise_id}@{dataset_id}" for dataset_id, noise_id, _ in test_cases]
+    evaluation_returns = [[[] for _ in AGENTS] for _ in test_cases]
 
     for test_index, (dataset_id, noise_id, noise_scale) in enumerate(test_cases):
         dataset = D4RLDataset(dataset_id, DEVICE)
         dynamic = load_dynamic(dataset)
-        test_id = f"{EXPERIMENT}_{noise_id}@{dataset_id}"
+        test_id = test_ids[test_index]
         env = gym.make(dataset.env_id)
-        table_rows[test_index][0] = test_id
-        for agent_index, agent_id in enumerate(AGENTS, start=1):
-            model_returns = []
+        for agent_index, agent_id in enumerate(AGENTS):
             for model_index in range(1, N_MODEL + 1):
                 agent = make_agent(agent_id, dataset, dynamic=dynamic)
                 agent.load(agent_path(MODEL_EXPERIMENT, agent, dataset, model_index))
-                model_returns.append(
-                    evaluate_state_noise(
-                        agent, env, dataset, noise_scale, N_EVAL, EVAL_SEED
-                    )
+                returns = evaluate_state_noise(
+                    agent, env, dataset, noise_scale, N_EVAL, EVAL_SEED
                 )
+                evaluation_returns[test_index][agent_index].extend(returns)
                 print(
                     f"evaluate model {model_index}/{N_MODEL} "
                     f"agent={agent_id} task={test_id} "
-                    f"return={model_returns[-1]:.6f}"
+                    f"return={sum(returns) / len(returns):.6f}"
                 )
-            average = sum(model_returns) / len(model_returns)
-            table_rows[test_index][agent_index] = f"{average:.6f}"
         env.close()
-        write_table(table_path(EXPERIMENT), header, table_rows)
+
+    write_average_table(table_path(EXPERIMENT, "average"), header, test_ids, evaluation_returns)
 
 
 if __name__ == "__main__":

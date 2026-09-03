@@ -27,7 +27,7 @@ D4RL_DATASET_FILES = (
     "halfcheetah_full_replay-v2.hdf5",
 )
 CONTAMINATED_REPOSITORY = "s10459020/joint-learning-contaminated"
-CONTAMINATED_REVISION = "dae25af948432857b223940e0288329e2d305c1f"
+CONTAMINATED_REVISION = "ee35ece0c503d7c7c4333c3fe46d881a5f2392a7"
 CONTAMINATED_DATASETS = (
     "walker2d_contaminated_10",
     "walker2d_contaminated_30",

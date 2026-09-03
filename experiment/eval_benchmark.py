@@ -4,7 +4,7 @@ from experiment.lib.agent import make_agent
 from experiment.lib.dataset import D4RLDataset
 from experiment.lib.eval import evaluate, load_dynamic
 from experiment.lib.paths import agent_path, table_path
-from experiment.lib.table import write_table
+from experiment.lib.table import write_average_table, write_pr95_table
 
 
 EXPERIMENT = "benchmark"
@@ -45,28 +45,27 @@ DATASETS = [
 
 def eval_benchmark() -> None:
     header = ["dataset"] + AGENTS
-    content = [[""] * len(header) for _ in DATASETS]
+    evaluation_returns = [[[] for _ in AGENTS] for _ in DATASETS]
 
     for dataset_index, dataset_id in enumerate(DATASETS):
         dataset = D4RLDataset(dataset_id, DEVICE)
         dynamic = load_dynamic(dataset)
         env = gym.make(dataset.env_id)
-        content[dataset_index][0] = dataset_id
-        for agent_index, agent_id in enumerate(AGENTS, start=1):
-            returns = []
+        for agent_index, agent_id in enumerate(AGENTS):
             for model_index in range(1, N_MODEL + 1):
                 agent = make_agent(agent_id, dataset, dynamic=dynamic)
                 agent.load(agent_path(EXPERIMENT, agent, dataset, model_index))
-                returns.append(evaluate(agent, env, dataset, N_EVAL, EVAL_SEED))
+                returns = evaluate(agent, env, dataset, N_EVAL, EVAL_SEED)
+                evaluation_returns[dataset_index][agent_index].extend(returns)
                 print(
                     f"evaluate model {model_index}/{N_MODEL} "
                     f"agent={agent_id} dataset={dataset_id} "
-                    f"return={returns[-1]:.6f}"
+                    f"return={sum(returns) / len(returns):.6f}"
                 )
-            average = sum(returns) / len(returns)
-            content[dataset_index][agent_index] = f"{average:.6f}"
-        write_table(table_path(EXPERIMENT), header, content)
         env.close()
+
+    write_average_table(table_path(EXPERIMENT, "average"), header, DATASETS, evaluation_returns)
+    write_pr95_table(table_path(EXPERIMENT, "pr95"), header, DATASETS, evaluation_returns)
 
 
 if __name__ == "__main__":

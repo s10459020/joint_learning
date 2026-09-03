@@ -16,5 +16,5 @@ def dynamic_path(dataset) -> Path:
     return MODEL_ROOT / f"dynamics-{dataset.id}.pt"
 
 
-def table_path(experiment_id: str) -> Path:
-    return TABLE_ROOT / f"{experiment_id}.csv"
+def table_path(experiment_id: str, metric: str) -> Path:
+    return TABLE_ROOT / f"{experiment_id}_{metric}.csv"

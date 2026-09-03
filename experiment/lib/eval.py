@@ -8,49 +8,56 @@ from experiment.lib.paths import dynamic_path
 def load_dynamic(dataset) -> Dynamic:
     dynamic = Dynamic(dataset.obs_size, dataset.act_size, device=dataset.device)
     path = dynamic_path(dataset)
-    if not path.exists():
-        raise FileNotFoundError(f"missing pretrained dynamics model: {path}")
     dynamic.load(path)
     return dynamic.eval().freeze()
 
 
-def evaluate(agent, env: gym.Env, dataset, episodes: int, seed: int | None = None) -> float:
-    total_return = 0.0
+def evaluate(agent, env: gym.Env, dataset, episodes: int, seed: int | None = None) -> list[float]:
+    returns = []
     for episode in range(episodes):
         observation, _ = env.reset(seed=None if seed is None else seed + episode)
         terminated = False
         truncated = False
+        total_return = 0.0
         while not (terminated or truncated):
             action = agent.act(dataset.normalize_observation(observation))
             observation, reward, terminated, truncated, _ = env.step(action)
             total_return += float(reward)
-    return total_return / episodes
+        returns.append(total_return)
+    return returns
 
 
-def evaluate_action_noise(agent, env: gym.Env, dataset, noise_scale: float, episodes: int, seed: int) -> float:
-    total_return = 0.0
+def evaluate_action_noise(
+    agent, env: gym.Env, dataset, noise_scale: float, episodes: int, seed: int
+) -> list[float]:
+    returns = []
     for episode in range(episodes):
         random_generator = np.random.default_rng(seed + episode)
         observation, _ = env.reset(seed=seed + episode)
         terminated = False
         truncated = False
+        total_return = 0.0
         while not (terminated or truncated):
             action = agent.act(dataset.normalize_observation(observation))
             epsilon = random_generator.standard_normal(action.shape).astype(np.float32)
             action = action + noise_scale * epsilon
             observation, reward, terminated, truncated, _ = env.step(action)
             total_return += float(reward)
-    return total_return / episodes
+        returns.append(total_return)
+    return returns
 
 
-def evaluate_state_noise(agent, env: gym.Env, dataset, noise_scale: float, episodes: int, seed: int) -> float:
+def evaluate_state_noise(
+    agent, env: gym.Env, dataset, noise_scale: float, episodes: int, seed: int
+) -> list[float]:
     state_std = np.concatenate(([0.0], dataset.obs_std))
-    total_return = 0.0
+    returns = []
     for episode in range(episodes):
         random_generator = np.random.default_rng(seed + episode)
         observation, _ = env.reset(seed=seed + episode)
         terminated = False
         truncated = False
+        total_return = 0.0
         while not (terminated or truncated):
             action = agent.act(dataset.normalize_observation(observation))
             observation, reward, terminated, truncated, _ = env.step(action)
@@ -70,4 +77,5 @@ def evaluate_state_noise(agent, env: gym.Env, dataset, noise_scale: float, episo
                 noisy_state[qpos_end:].reshape(qvel.shape),
             )
             observation = base_env._get_obs()
-    return total_return / episodes
+        returns.append(total_return)
+    return returns
