@@ -1,57 +1,43 @@
 import torch
 
 from experiment.lib.agent import DYNAMIC_AGENT_CLASSES, make_agent
-from experiment.lib.dataset import D4RLDataset
+from experiment.lib.dataset import MinariDataset
 from experiment.lib.train import train, train_dynamic
 
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
-EXPERIMENT = "stability_td3bc"
+EXPERIMENT = "contaminated"
 N_MODEL = 10
 N_TRAIN = 500_000
 BATCH_SIZE = 256
-PRINT_INTERVAL = 2_000
+PRINT_INTERVAL = 5_000
 MODEL_STEPS = 500_000
 MODEL_BATCH_SIZE = 256
 MODEL_PRINT_INTERVAL = 10_000
 
 AGENTS = [
+    "bc",
     "td3bc",
-    "td3bc_xn",
-    "td3bc_p",
-    "td3bc_xn_gp",
-    "td3bc_p_gp",
-    "td3bc_gp",
-    "aspl",
+    "iql",
+    "cql",
     "aspl_c",
-    "aspl_gp",
-    "scas",
     "scas_n",
-    "scas_gp",
-    "scas_gpn",
-    "scaspl",
     "scaspl_n",
-    "scaspl_gp",
-    "scaspl_c",
-    "scaspl_nc",
-    "sccc",
     "sccc_n",
-    "sccc_gp",
-    "sccc_gpn",
 ]
 
 DATASETS = [
-    "walker2d_medium",
-    "walker2d_expert",
-    "walker2d_hybrid",
-    "walker2d_medium_replay",
-    "walker2d_expert_replay",
+    "walker2d_contaminated_10",
+    "walker2d_contaminated_30",
+    "walker2d_contaminated_50",
+    "walker2d_contaminated_70",
+    "walker2d_contaminated_90",
 ]
 
 
-def train_stability() -> None:
+def train_contaminated() -> None:
     for dataset_id in DATASETS:
-        dataset = D4RLDataset(dataset_id, DEVICE)
+        dataset = MinariDataset(dataset_id, DEVICE)
         dynamic = (
             train_dynamic(dataset, MODEL_STEPS, MODEL_BATCH_SIZE, MODEL_PRINT_INTERVAL)
             if any(agent_id in DYNAMIC_AGENT_CLASSES for agent_id in AGENTS)
@@ -76,4 +62,4 @@ def train_stability() -> None:
 
 
 if __name__ == "__main__":
-    train_stability()
+    train_contaminated()

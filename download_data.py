@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from huggingface_hub import hf_hub_download
+from huggingface_hub import hf_hub_download, snapshot_download
 
 
 DATASET_ROOT = Path(__file__).resolve().parent / "datasets"
@@ -26,6 +26,15 @@ D4RL_DATASET_FILES = (
     "halfcheetah_medium_replay-v2.hdf5",
     "halfcheetah_full_replay-v2.hdf5",
 )
+CONTAMINATED_REPOSITORY = "s10459020/joint-learning-contaminated"
+CONTAMINATED_REVISION = "dae25af948432857b223940e0288329e2d305c1f"
+CONTAMINATED_DATASETS = (
+    "walker2d_contaminated_10",
+    "walker2d_contaminated_30",
+    "walker2d_contaminated_50",
+    "walker2d_contaminated_70",
+    "walker2d_contaminated_90",
+)
 
 
 def main() -> None:
@@ -44,6 +53,21 @@ def main() -> None:
             filename=filename,
             revision=D4RL_REVISION,
             local_dir=DATASET_ROOT,
+        )
+
+    for dataset_index, dataset_id in enumerate(CONTAMINATED_DATASETS, start=1):
+        destination = DATASET_ROOT / dataset_id
+        if destination.exists():
+            print(f"skip {dataset_index}/{len(CONTAMINATED_DATASETS)} {dataset_id}")
+            continue
+
+        print(f"download {dataset_index}/{len(CONTAMINATED_DATASETS)} {dataset_id}")
+        snapshot_download(
+            repo_id=CONTAMINATED_REPOSITORY,
+            repo_type="dataset",
+            revision=CONTAMINATED_REVISION,
+            local_dir=DATASET_ROOT,
+            allow_patterns=f"{dataset_id}/data/*",
         )
 
     print(f"data ready at {DATASET_ROOT}")

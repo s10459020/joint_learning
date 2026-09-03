@@ -65,16 +65,18 @@ python -m experiment.eval_noise_action
 python -m experiment.eval_noise_state
 ```
 
-To run the TD3BC stability experiment:
+To train and evaluate the stability experiment:
 
 ```bash
-python -m experiment.train_stability_td3bc
+python -m experiment.train_stability
+python -m experiment.eval_stability
 ```
 
-Evaluate the stability models separately:
+To train and evaluate the contaminated-dataset experiment:
 
 ```bash
-python -m experiment.eval_stability_td3bc
+python -m experiment.train_contaminated
+python -m experiment.eval_contaminated
 ```
 
 Each experiment's agents, datasets, device, training steps, evaluation count, and noise scales are configured at the top of its Python file. The experiment scripts should be run from the project root so that the `datasets/` and `result/` directories are resolved correctly.
