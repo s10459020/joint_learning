@@ -4,7 +4,6 @@ import gymnasium
 import h5py
 import huggingface_hub
 import experiment
-import matplotlib
 import numpy
 import torch
 
@@ -22,7 +21,6 @@ def main() -> None:
     print(f"gymnasium={gymnasium.__version__}")
     print(f"h5py={h5py.__version__}")
     print(f"huggingface_hub={huggingface_hub.__version__}")
-    print(f"matplotlib={matplotlib.__version__}")
     print(f"numpy={numpy.__version__}")
     print(f"torch={torch.__version__}")
 
