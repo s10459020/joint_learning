@@ -1,6 +1,19 @@
 # Joint Learning
 
-Research code for joint learning of action-space constraints and state correction in offline reinforcement learning.
+Research code for a master's research project on joint learning of action-space constraints and state correction in offline reinforcement learning. This repository contains a simplified and reorganized implementation for reproducing the main experiments and supporting follow-up research.
+
+## Included Methods
+
+- BC
+- TD3BC
+- IQL
+- CQL
+- ASPL
+- SCAS
+- SCASPL
+- SCCC
+
+SCASPL and SCCC are the joint-learning methods studied in the thesis.
 
 ## Installation
 
@@ -22,42 +35,59 @@ python -m pip install -e .
 
 The commands above install the program without datasets.
 
-## Dataset Installation
+### Dataset Installation
 
-To also download the datasets used by the project, run:
+Download the datasets used by the experiments. The download includes 18 D4RL
+MuJoCo datasets and 5 contaminated datasets (23 datasets in total), requiring
+approximately **6.4 GB (5.95 GiB)** of disk space. Reserve at least **7 GB**
+to allow for download metadata and temporary files:
 
 ```bash
 python download_data.py
 ```
 
-## Verification
+### Verification
 
-Run the installation and device checks after installation:
+Run the installation and device checks:
 
 ```bash
 python tests/test_install.py
 python tests/test_device.py
 ```
 
-The checks should finish with `install=ok` and `device_test=ok`.
+The checks should finish with:
 
-## Experiment Entry Points
+```text
+install=ok
+device_test=ok
+```
 
-Run the main benchmark from the project root:
+## Experiments
+
+The repository contains four experiment groups:
+
+- **Benchmark** — comparison across the selected D4RL MuJoCo datasets.
+- **Stability** — analysis of how model variants, normalization, gradient penalties, and pseudo-label compensation affect policy performance and training stability.
+- **Noise Evaluation** — robustness under initial-state, action, and state perturbations.
+- **Contaminated Dataset** — evaluation under datasets with controlled data-quality interference.
+
+### Benchmark
+
+Train the benchmark models:
 
 ```bash
 python -m experiment.train_benchmark
 ```
 
-The benchmark training entry point trains the configured agents on the configured datasets and writes models under `result/model/benchmark/`.
-
-After training is complete, evaluate the saved benchmark models separately:
+Evaluate the trained models:
 
 ```bash
 python -m experiment.eval_benchmark
 ```
 
-After the benchmark has produced model files, run the noise evaluation experiments:
+### Noise Evaluation
+
+After benchmark models are available, run:
 
 ```bash
 python -m experiment.eval_noise_init
@@ -65,20 +95,26 @@ python -m experiment.eval_noise_action
 python -m experiment.eval_noise_state
 ```
 
-To train and evaluate the stability experiment:
+### Stability
+
+Train and evaluate the stability experiment:
 
 ```bash
 python -m experiment.train_stability
 python -m experiment.eval_stability
 ```
 
-To train and evaluate the contaminated-dataset experiment:
+### Contaminated Dataset
+
+Train and evaluate the contaminated-dataset experiment:
 
 ```bash
 python -m experiment.train_contaminated
 python -m experiment.eval_contaminated
 ```
 
-Each experiment's agents, datasets, device, training steps, evaluation count, and noise scales are configured at the top of its Python file. The experiment scripts should be run from the project root so that the `datasets/` and `result/` directories are resolved correctly.
+## Outputs
 
-Experiment outputs are kept in `result/`, which is excluded from version control. This allows the source code to be published first and the generated results to be added later.
+Experiment outputs are written under `result/`.
+
+Generated models and results are excluded from version control so that the repository remains focused on the research implementation and experiment workflow.
